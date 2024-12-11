@@ -6,7 +6,5 @@ using System.Threading.Tasks;
 
 namespace Eshop.Contracts.Logistics
 {
-    internal class OrderDeliveredEvent
-    {
-    }
+    public record OrderDeliveredEvent(Guid OrderId);
 }

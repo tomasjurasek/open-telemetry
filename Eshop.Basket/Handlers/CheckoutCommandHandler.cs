@@ -18,7 +18,7 @@ namespace Eshop.Basket.Handlers
             basket.AddDeliveryAddress(request.DeliveryAddress.Map());
 
             await store.StoreAsync(basket);
-            await bus.Publish(new OrderCheckedEvent(request.DeliveryAddress, basket.Items.Map()));
+            await bus.Publish(new OrderCheckedEvent(request.BasketId/*request.DeliveryAddress, basket.Items.Map())*/));
         }
     }
 

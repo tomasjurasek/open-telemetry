@@ -6,7 +6,5 @@ using System.Threading.Tasks;
 
 namespace Eshop.Contracts.Order
 {
-    public record OrderCompletedEvent
-    {
-    }
+    public record OrderCompletedEvent(Guid OrderId);
 }

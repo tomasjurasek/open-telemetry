@@ -7,6 +7,8 @@ using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using MassTransit.Logging;
+using MassTransit.Monitoring;
 
 namespace Eshop.ServiceDefaults;
 
@@ -15,8 +17,7 @@ public static class OpenTelemetryExtensions
     public static TBuilder AddOpenTelemetry<TBuilder>(this TBuilder builder) where TBuilder : IHostApplicationBuilder
     {
         // Activity Provider
-        var serviceName = builder.Configuration["OTEL_SERVICE_NAME"];
-        ActivityProvider.Create(serviceName ?? Assembly.GetEntryAssembly().FullName);
+        ActivityProvider.Create(builder.Environment.ApplicationName);
 
 
         builder.Logging.AddOpenTelemetry(logging =>
@@ -29,13 +30,15 @@ public static class OpenTelemetryExtensions
             .UseOtlpExporter()
             .WithMetrics(metrics =>
             {
-                metrics.AddAspNetCoreInstrumentation()
+                metrics
+                    .AddMeter(builder.Environment.ApplicationName, InstrumentationOptions.MeterName)
+                    .AddAspNetCoreInstrumentation()
                     .AddHttpClientInstrumentation()
                     .AddRuntimeInstrumentation();
             })
             .WithTracing(tracing =>
             {
-                tracing.AddSource(builder.Environment.ApplicationName)
+                tracing.AddSource(builder.Environment.ApplicationName, DiagnosticHeaders.DefaultListenerName)
                     .AddAspNetCoreInstrumentation()
                     .AddHttpClientInstrumentation();
             });

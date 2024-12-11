@@ -29,10 +29,10 @@ builder.Services.AddMassTransit(x =>
     {
         cfg.Host(builder.Configuration.GetConnectionString("messaging"));
 
-        cfg.Message<OrderCheckedEvent>(e => e.SetEntityName("order-checkout"));
+        //cfg.Message<OrderCheckedEvent>(/*e => e.SetEntityName("order-checkout")*/);
         cfg.Publish<OrderCheckedEvent>();
 
-        cfg.UseRawJsonSerializer(RawSerializerOptions.AddTransportHeaders | RawSerializerOptions.CopyHeaders);
+        //cfg.UseRawJsonSerializer(RawSerializerOptions.AddTransportHeaders | RawSerializerOptions.CopyHeaders);
 
     });
 });
@@ -68,6 +68,10 @@ app.MapPost("v1/baskets/{id:guid}/checkout", async (IMediator mediator, [FromBod
 {
     await mediator.Publish(command);
     return Results.Ok();
+});
+
+app.MapPost("/test", async (IBus bus) => {
+    await bus.Publish(new OrderCheckedEvent(Guid.NewGuid()));
 });
 
 app.Run();

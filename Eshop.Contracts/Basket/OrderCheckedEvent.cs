@@ -1,3 +1,3 @@
 ﻿namespace Eshop.Contracts.Basket;
 
-public record OrderCheckedEvent(Address DeliveryAddress, IReadOnlyCollection<Item> Items);
+public record OrderCheckedEvent(Guid BasketId/*, Address DeliveryAddress, IReadOnlyCollection<Item> Items*/);
