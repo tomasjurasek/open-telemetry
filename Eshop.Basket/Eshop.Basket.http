@@ -1,0 +1,12 @@
+@Eshop.Basket_HostAddress = https://localhost:7004
+@id=c1daf143-0550-4ba8-8912-a92dffc308ab
+
+POST {{Eshop.Basket_HostAddress}}/v1/baskets/{{id}}/products/add/
+Accept: application/json
+
+{
+    "BasketId": "c1daf143-0550-4ba8-8912-a92dffc308ab",
+    "ProductId": "c1daf143-0550-4ba8-8912-a92dffc308ab"
+}
+
+###
