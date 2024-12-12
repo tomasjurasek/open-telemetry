@@ -16,14 +16,8 @@ builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(buil
 
 builder.Services.AddMassTransit(x =>
 {
-
     x.AddSagaStateMachine<OrderStateMachine, OrderState>();
     x.SetInMemorySagaRepositoryProvider();
-    //.EntityFrameworkRepository(r =>
-    //{
-    //    r.ExistingDbContext<AppDbContext>();
-    //    r.UseSqlServer();
-    //});
 
     x.UsingRabbitMq((context, cfg) =>
     {
@@ -46,6 +40,10 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+
+app.MapPost("/orders/{id:guid}", async (IBus bus) => {
+   
+});
 
 app.Run();
 

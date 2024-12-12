@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 namespace Eshop.Contracts.Payment
 {
-    public class OrderPaidEvent(Guid OrderId);
+    public record OrderPaidEvent(Guid OrderId);
 }

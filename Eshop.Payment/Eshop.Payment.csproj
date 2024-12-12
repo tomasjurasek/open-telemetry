@@ -8,9 +8,12 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.0-rc.2.24474.3" />
+	  <PackageReference Include="MassTransit" Version="8.3.3" />
+	  <PackageReference Include="MassTransit.RabbitMQ" Version="8.3.3" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Eshop.Contracts\Eshop.Contracts.csproj" />
     <ProjectReference Include="..\Eshop.ServiceDefaults\Eshop.ServiceDefaults.csproj" />
   </ItemGroup>
 

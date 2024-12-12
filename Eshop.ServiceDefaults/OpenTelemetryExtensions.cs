@@ -9,6 +9,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using MassTransit.Logging;
 using MassTransit.Monitoring;
+using System.Diagnostics;
 
 namespace Eshop.ServiceDefaults;
 
@@ -16,10 +17,6 @@ public static class OpenTelemetryExtensions
 {
     public static TBuilder AddOpenTelemetry<TBuilder>(this TBuilder builder) where TBuilder : IHostApplicationBuilder
     {
-        // Activity Provider
-        ActivityProvider.Create(builder.Environment.ApplicationName);
-
-
         builder.Logging.AddOpenTelemetry(logging =>
         {
             logging.IncludeFormattedMessage = true;
@@ -40,8 +37,27 @@ public static class OpenTelemetryExtensions
             {
                 tracing.AddSource(builder.Environment.ApplicationName, DiagnosticHeaders.DefaultListenerName)
                     .AddAspNetCoreInstrumentation()
-                    .AddHttpClientInstrumentation();
+                    .AddHttpClientInstrumentation()
+                    .AddRedisInstrumentation();
             });
+
+
+
+        ActivityProvider.Create(builder.Environment.ApplicationName);
+        MeterProvider.Create(builder.Environment.ApplicationName);
+
+        var listener = new ActivityListener
+        {
+            ShouldListenTo = _ => true,
+            ActivityStopped = activity =>
+            {
+                foreach (var (key, value) in activity.Baggage)
+                {
+                    activity.AddTag(key, value);
+                }
+            }
+        };
+        ActivitySource.AddActivityListener(listener);
 
         return builder;
     }

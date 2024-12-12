@@ -1,28 +1,29 @@
 ﻿using Eshop.ServiceDefaults;
 using Microsoft.Extensions.Caching.Distributed;
+using StackExchange.Redis;
 using System.Text.Json;
 
 namespace Eshop.Basket.Store
 {
     public class BasketStore : IBasketStore
     {
-        private readonly IDistributedCache store;
+        private readonly IConnectionMultiplexer store;
 
-        public BasketStore(IDistributedCache store)
+        public BasketStore(IConnectionMultiplexer store)
         {
             this.store = store;
         }
 
-        public async Task<Domain.Basket> GetBasketAsync(Guid basketId)
+        public async Task<Domain.Basket?> GetBasketAsync(Guid basketId)
         {
             using var activity = ActivityProvider.ActivitySource.StartActivity(nameof(GetBasketAsync));
-            activity?.SetTag("basketId", basketId.ToString());
+            var db = store.GetDatabase();
+            var json = await db.StringGetAsync(basketId.ToString());
 
-            var json = await store.GetStringAsync(basketId.ToString());
-
-            if (json == null)
+            if (!json.HasValue)
             {
                 activity?.AddEvent(new System.Diagnostics.ActivityEvent("BasketNotFound"));
+                return null;
             }
 
             return JsonSerializer.Deserialize<Domain.Basket>(json);
@@ -31,11 +32,11 @@ namespace Eshop.Basket.Store
 
         public async Task StoreAsync(Domain.Basket basket)
         {
-            using var activity = ActivityProvider.ActivitySource.StartActivity(nameof(GetBasketAsync));
-            activity?.SetTag("basketId", basket.Id.ToString());
+            using var activity = ActivityProvider.ActivitySource.StartActivity(nameof(StoreAsync));
+            var db = store.GetDatabase();
 
             var json = JsonSerializer.Serialize(basket);
-            await store.SetStringAsync(basket.Id.ToString(), json);
+            await db.StringSetAsync(basket.Id.ToString(), json);
         }
     }
 }

@@ -17,6 +17,6 @@ namespace Eshop.Basket.Domain
 
     public static class ItemMapper
     {
-        public static IReadOnlyCollection<Contracts.Item> Map(this IReadOnlyCollection<Item> items) => items.Select(items => new Contracts.Item(items.ProductId, items.Quantity)).ToList();
+        public static IList<Contracts.Item> Map(this IList<Item> items) => items.Select(items => new Contracts.Item(items.ProductId, items.Quantity)).ToList();
     }
 }

@@ -2,6 +2,7 @@
 using Eshop.ServiceDefaults;
 using MediatR;
 using OpenTelemetry;
+using System.Diagnostics;
 
 namespace Eshop.Basket.Handlers
 {
@@ -9,15 +10,14 @@ namespace Eshop.Basket.Handlers
     {
         public async Task Handle(AddProductCommand request, CancellationToken cancellationToken)
         {
-            // Move to middleware
-            Baggage.SetBaggage("basketId", request.BasketId.ToString());
-
             using var activity = ActivityProvider.ActivitySource.StartActivity("AddProductCommandHandler");
 
             var basket = await store.GetBasketAsync(request.BasketId);
             if (basket == null)
             {
-                // TODO Error
+                basket = new Domain.Basket(request.BasketId,Guid.NewGuid());
+                activity?.AddEvent(new ActivityEvent("BasketCreated"));
+                BasketMetrics.BasketCreated();
             }
 
             basket.AddProduct(request.ProductId);
