@@ -6,6 +6,7 @@ using Eshop.Contracts.Basket;
 using MassTransit;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using OpenTelemetry;
 using StackExchange.Redis;
 using System.Diagnostics;
 

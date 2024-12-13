@@ -10,7 +10,6 @@ public class AddProductCommandHandler(IBasketStore store) : IRequestHandler<AddP
     public async Task Handle(AddProductCommand request, CancellationToken cancellationToken)
     {
         using var activity = ActivityProvider.ActivitySource.StartActivity("AddProductCommandHandler");
-
         try
         {
             var basket = await store.GetBasketAsync(request.BasketId);

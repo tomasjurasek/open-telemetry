@@ -35,26 +35,14 @@ public static class OpenTelemetryExtensions
                 tracing.AddSource(builder.Environment.ApplicationName, DiagnosticHeaders.DefaultListenerName)
                     .AddAspNetCoreInstrumentation()
                     .AddHttpClientInstrumentation()
-                    .AddRedisInstrumentation();
+                    .AddRedisInstrumentation()
+                    .AddProcessor<BaggageSpanProcessor>();
             });
 
 
 
         ActivityProvider.Create(builder.Environment.ApplicationName);
         MeterProvider.Create(builder.Environment.ApplicationName);
-
-        var listener = new ActivityListener
-        {
-            ShouldListenTo = _ => true,
-            ActivityStopped = activity =>
-            {
-                foreach (var (key, value) in activity.Baggage)
-                {
-                    activity.AddTag(key, value);
-                }
-            }
-        };
-        ActivitySource.AddActivityListener(listener);
 
         return builder;
     }

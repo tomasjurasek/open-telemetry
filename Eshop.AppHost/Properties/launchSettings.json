@@ -23,7 +23,7 @@
         "DOTNET_ENVIRONMENT": "Development",
         "DOTNET_DASHBOARD_OTLP_ENDPOINT_URL": "http://localhost:19042",
         "DOTNET_RESOURCE_SERVICE_ENDPOINT_URL": "http://localhost:20249",
-        //"DOTNET_ASPIRE_CONTAINER_RUNTIME": "podman"
+        "DOTNET_ASPIRE_CONTAINER_RUNTIME": "podman"
       }
     }
   }
