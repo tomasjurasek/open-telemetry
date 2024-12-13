@@ -2,11 +2,8 @@
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using OpenTelemetry;
-using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
-using System.Reflection;
-using System.Runtime.CompilerServices;
 using MassTransit.Logging;
 using MassTransit.Monitoring;
 using System.Diagnostics;

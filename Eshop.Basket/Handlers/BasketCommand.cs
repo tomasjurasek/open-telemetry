@@ -1,7 +1,6 @@
-﻿namespace Eshop.Basket.Handlers
+﻿namespace Eshop.Basket.Handlers;
+
+public abstract class BasketCommand : IBasketCommand
 {
-    public abstract class BasketCommand : IBasketCommand
-    {
-        public required Guid BasketId { get; init; }
-    }
+    public required Guid BasketId { get; init; }
 }

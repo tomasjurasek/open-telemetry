@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Eshop.Contracts.Order
+﻿namespace Eshop.Contracts.Order
 {
     public record OrderCompletedEvent(Guid OrderId);
 }

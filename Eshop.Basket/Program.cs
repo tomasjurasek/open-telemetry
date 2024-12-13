@@ -2,25 +2,16 @@
 using Eshop.Basket;
 using Eshop.Basket.Handlers;
 using Eshop.Basket.Store;
-using Eshop.Contracts;
 using Eshop.Contracts.Basket;
 using MassTransit;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using OpenTelemetry;
 using StackExchange.Redis;
 using System.Diagnostics;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
-
-
-//builder.Services.AddStackExchangeRedisCache(options =>
-//{
-//    options.Configuration = builder.Configuration.GetConnectionString("basket-store");
-//    options.InstanceName = "BasketStore";
-//});
 
 builder.Services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(builder.Configuration.GetConnectionString("basket-store")));
 
