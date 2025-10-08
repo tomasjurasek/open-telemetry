@@ -1,5 +1,3 @@
-using IdentityModel.OidcClient;
-
 var builder = DistributedApplication.CreateBuilder(args);
 
 var messaging = builder.AddRabbitMQ("messaging")
